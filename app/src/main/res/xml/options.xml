@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--CheckBoxPreference
+        android:key="animation"
+        android:title="@string/animation_pref_title"
+        android:summaryOn="@string/animation_pref_summary_on"
+        android:summaryOff="@string/animation_pref_summary_off"
+        android:defaultValue="true" /-->
+    <CheckBoxPreference
+        android:key="faketoast"
+        android:title="@string/faketoast_pref_title"
+        android:summaryOn="@string/faketoast_pref_summary_on"
+        android:summaryOff="@string/faketoast_pref_summary_off"
+        android:defaultValue="true" />
+</PreferenceScreen>

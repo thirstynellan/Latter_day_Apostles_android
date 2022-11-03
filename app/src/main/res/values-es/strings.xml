@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Apóstolos SUD</string>
+    <string name="action_go_to_today">Ir para data</string>
+    <string name="choose_a_year"> Escolha o ano </string>
+    <string name="action_about">Sobre os apóstolos SUD</string>
+    <string name="about_detail">Progamado por Meilan Jin, Iliesa Delai e Kwangwon Yi sobre a supervisão do Dr. Geoffrey Draper na Brigham Young University Hawaii.\n\nTradução feita por Davisson de Oliveira, Marco Delgado, Wagner Albuquerque, e Ana Carone.\n\nImagens dos apóstolos adaptadas a partir do site Wikipedia.\n\nAs informações quorum cronológicas da Primeira Presidência adaptadas a partir do site http://en.wikipedia.org/wiki/Chronology_of_the_First_Presidency_(LDS_Church)\n\n Quorum Informações sobre a cronologia adaptada a partir do site http://en.wikipedia.org/wiki/Chronology_of_the_Quorum_of_the_Twelve_Apostles_(LDS_Church)#Chart\n\nBiographical Informações do Deseret News Church Almanac adaptadas  a partir do site.\n\nEsse aplicativo é um projeto de pesquisa financiado pela Brigham Young University Hawaii; contudo, a responsabilidade dos contéudos é interamente dos desenvolvedores. Este aplicativo não é uma publicação official de a Igreja de Jesus Cristo dos Santos dos Últimos Dias.</string>
+    <string name="ok">OK</string>
+    <string name="biography">Bibliografia</string>
+    <string name="animation_pref_title">Transições Animadas</string>
+    <string name="animation_pref_summary_on">Mudanças no gráfico ocorrerão suavemente.</string>
+    <string name="animation_pref_summary_off">O gráfico será atualizado imediatamente, sem nenhuma animação.</string>
+    <string name="prefs_option">Configurações</string>
+    <string name="faketoast_pref_title">Popups</string>
+    <string name="faketoast_pref_summary_on">Popups permanecerão na tela até serem clicados</string>
+    <string name="faketoast_pref_summary_off">Popups desaparecerão depois de alguns segundos</string>
+    <string name="toast_current">Você está em a data atual</string>
+    <string name="toast_begin">Você está no início da linha do tempo</string>
+    <string name="language_option">language-pt</string>
+</resources>

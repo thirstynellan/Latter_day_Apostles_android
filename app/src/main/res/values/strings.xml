@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Latter-day Apostles</string>
+    <string name="action_go_to_today">Go to Date</string>
+    <string name="choose_a_year">Choose a Year</string>
+    <string name="action_about">About Latter-day Apostles</string>
+    <string name="about_detail">Programming by Meilan Jin, Iliesa Delai, Kwangwon Yi, and Hongbin Lee under the supervision of Dr. Geoffrey Draper at Brigham Young University Hawaii.\n\nApostle images are copyrighted by Intellectual Reserve, Inc.; Used by permission.\n\nFirst Presidency chronology information adapted from http://en.wikipedia.org/wiki/Chronology_of_the_First_Presidency_(LDS_Church)\n\nQuorum chronology information adapted from http://en.wikipedia.org/wiki/Chronology_of_the_Quorum_of_the_Twelve_Apostles_(LDS_Church)#Chart\n\nBiographical information adapted from Deseret News Church Almanac.\n\nThis app is a research project funded by Brigham Young University Hawaii; however, the contents are the responsibility of its developers. This app is not an \"official\" publication of the Church of Jesus Christ of Latter-day Saints.</string>
+    <string name="ok">OK</string>
+    <string name="biography">Biography</string>
+   	<string name="animation_pref_title">Animated Transitions</string>
+	<string name="animation_pref_summary_on">Changes to the chart will be smoothly animated.</string>
+	<string name="animation_pref_summary_off">Chart will update immediately, without animation.</string>
+    <string name="faketoast_pref_title">Popup Messages</string>
+    <string name="faketoast_pref_summary_on">Popup messages stay on-screen until dismissed.</string>
+    <string name="faketoast_pref_summary_off">Popup messages disappear after a few seconds.</string>
+	<string name="language_option">language-en</string>
+    <string name="toast_current">You have reached the current date</string>
+    <string name="toast_begin">You have reached the beginning of the timeline</string>
+    <string name="prefs_option">Settings</string>
+</resources>
