@@ -89,9 +89,9 @@ public class FakeToast {
             linePos[i] = new PointF(center.x - textColor.measureText(lines[i])/2f, topRow + i*textHeight);
         }
         //for debug
-		for (String ln : lines) {
-			Log.d("LINES*****", ln);
-		}
+//		for (String ln : lines) {
+//			Log.d("LINES*****", ln);
+//		}
         //closeButtonHotSpot = new RectF(bounds.centerX(), bounds.top-bounds.height()/2f, parent.getWidth(), bounds.bottom);
     }
 
@@ -112,7 +112,7 @@ public class FakeToast {
         c.drawLine(closeButton.right, closeButton.top, closeButton.right, closeButton.bottom, textColor);
         c.drawLine(closeButton.right, closeButton.bottom, closeButton.left, closeButton.bottom, textColor);
         c.drawLine(closeButton.left, closeButton.bottom, closeButton.left, closeButton.top, textColor);
-        Log.d("DRAW_FAKETOAST","DRAWING!");
+        //Log.d("DRAW_FAKETOAST","DRAWING!");
     }
 
 //    public boolean contains(float x, float y) {

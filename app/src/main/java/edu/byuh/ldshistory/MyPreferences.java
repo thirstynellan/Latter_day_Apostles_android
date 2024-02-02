@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 public class MyPreferences extends PreferenceActivity {
 
-	public static final String OPT_ANIMATION = "animation";
+	/*public static final String OPT_ANIMATION = "animation";
 	public static final String OPT_FAKETOAST = "faketoast";
 
 	@Override
@@ -27,5 +27,5 @@ public class MyPreferences extends PreferenceActivity {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 				.getBoolean(OPT_FAKETOAST, true);
 	}
-
+*/
 }

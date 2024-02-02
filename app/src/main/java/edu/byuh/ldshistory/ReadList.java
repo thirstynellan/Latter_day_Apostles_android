@@ -42,8 +42,7 @@ public class ReadList {
 		String splitBy= "\\|";
 		String splitBy1 = "%";
 		
-		try{ 
-			InputStream is = am.open(CSVFile);
+		try (InputStream is = am.open(CSVFile)) {
 			Scanner s = new Scanner(is);
 			while (s.hasNextLine()) {
 				//split by comma, apostleAttributes comtain a single line of the csv file
@@ -54,7 +53,7 @@ public class ReadList {
 				String[] presidency;
 				presidency = list1.split(splitBy);
 				for (int i=0; i<presidency.length; i++) {
-					Log.d("prints" , presidency[i]);
+					//Log.d("prints" , presidency[i]);
 				}
 					
 				String[] twelve = null;

@@ -18,4 +18,6 @@
     <string name="toast_current">You have reached the current date</string>
     <string name="toast_begin">You have reached the beginning of the timeline</string>
     <string name="prefs_option">Settings</string>
+    <string name="forward">Forward</string>
+    <string name="back">Back</string>
 </resources>

@@ -5,11 +5,11 @@
           android:title="@string/action_go_to_today"
           android:showAsAction="ifRoom" />
 	 
-     <item
+     <!--item
         android:id="@+id/action_prefs"
         android:orderInCategory="99"
         android:showAsAction="never"
-        android:title="@string/prefs_option"/>
+        android:title="@string/prefs_option"/-->
 	 <item
         android:id="@+id/action_about"
         android:orderInCategory="100"

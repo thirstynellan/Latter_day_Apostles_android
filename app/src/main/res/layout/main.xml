@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"
             android:src="@drawable/navigation_forward"
             android:id="@+id/fowbutton"
+            android:contentDescription="@string/forward"
             android:layout_alignTop="@+id/bacbutton"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" ></ImageButton>>
+            android:layout_alignParentEnd="true" ></ImageButton>
 
         <ImageButton
 
@@ -32,9 +33,10 @@
             android:layout_height="wrap_content"
             android:src="@drawable/navigation_back"
             android:id="@+id/bacbutton"
+            android:contentDescription="@string/back"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" ></ImageButton>>
+            android:layout_alignParentStart="true" ></ImageButton>
 
         <TextView
             android:layout_width="wrap_content"

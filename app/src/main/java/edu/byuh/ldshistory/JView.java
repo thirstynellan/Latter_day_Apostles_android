@@ -74,11 +74,11 @@ public class JView extends View implements TickListener {
 
 	public void createFakeToast(CharSequence words) {
 		fakeToast = new FakeToast(this, words.toString());
-		Log.d("Debug! ******** ", words.toString());
+		//Log.d("Debug! ******** ", words.toString());
 	}
 
 	public void cancelFakeToast() {
-		Log.d("Cancel_Toast****", "Printing cancelFakeToast method!");
+		//Log.d("Cancel_Toast****", "Printing cancelFakeToast method!");
 		if (fakeToast != null) {
 			fakeToast = null;
 			invalidate();
@@ -156,7 +156,6 @@ public class JView extends View implements TickListener {
 		//touching = false;
 		rot = Rotation.CCW;
 		bounceBack = false;
-
 	}
 
 	public boolean goForward() {
@@ -225,7 +224,11 @@ public class JView extends View implements TickListener {
 			//log("New date is " + day + " " + month + " " + year);
 
 			//busy wait, until list object finishes loading
-			while (list == null || list.twelveList == null) {}
+			//log("before busy wait");
+			while (list == null || list.twelveList == null) {
+				//log("inside busy wait");
+			}
+			//log("after busy wait");
 
 			if (list.twelveList.containsKey(date) == false) {
 				// loop through the sorted dates from back wards and use the
@@ -326,7 +329,6 @@ public class JView extends View implements TickListener {
 
 	@Override
 	public void onDraw(Canvas c) {
-
 		if (firstTime || sWidth != getWidth()) {
 			cancelFakeToast();
 			//System.out.print("Test"+month+day+year);
@@ -357,6 +359,7 @@ public class JView extends View implements TickListener {
 
 			currentLayout = calculatePositions();
 
+
 			firstTime = false;
 		}
 
@@ -372,7 +375,6 @@ public class JView extends View implements TickListener {
 			//draw the apostle lines
 			c.drawPath(quLines, paint);
 		}
-
 		// draw the second circle
 		cPaint.setColor(Color.WHITE);
 		c.drawPath(circle2, cPaint);
@@ -380,13 +382,11 @@ public class JView extends View implements TickListener {
 		// draw the smallest circle
 		cPaint.setColor(Color.rgb(189, 183, 107));
 		c.drawCircle(cx, cy, innerCircleRadius, cPaint);
-
 		if (!animating || bounceBack) {
 			//draw the FP lines
 			c.drawPath(fpLines, paint);
 		}
-
-		log("rendering " + currentLayout.positions.keySet().size() + " apostles");
+		//log("rendering " + currentLayout.positions.keySet().size() + " apostles");
 		for (Apostle ap : currentLayout.positions.keySet()) {
 
 			//if we're animating, don't instantiate anything.
@@ -529,7 +529,7 @@ public class JView extends View implements TickListener {
 					}
 					int yearDelta = (int)(degreeDelta * (50 / Math.PI));//50 years = half circle
 					int newYear = year + yearDelta;
-					if (newYear > MainActivity.CURRENT_YEAR && MyPreferences.getAnimationPreference(getContext())) {
+					if (newYear > MainActivity.CURRENT_YEAR /*&& MyPreferences.getAnimationPreference(getContext())*/) {
 						boingDegrees += degreeDelta;
 						currentLayout = calculatePositions();
 						invalidate();
@@ -576,11 +576,11 @@ public class JView extends View implements TickListener {
 	public void respondToDateChange() {
 		cancelFakeToast();
 		newLayout = calculatePositions();
-		if (MyPreferences.getAnimationPreference(getContext())) {
+		//if (MyPreferences.getAnimationPreference(getContext())) {
 			animating = diff();
-		} else {
-			currentLayout = newLayout;
-		}
+//		} else {
+//			currentLayout = newLayout;
+//		}
 		invalidate();
 	}
 	/**

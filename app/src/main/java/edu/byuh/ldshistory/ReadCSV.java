@@ -40,9 +40,9 @@ public class ReadCSV {
 		//String line ="";
 		String splitBy= "\\|";
 		
-		try{ 
+		try (InputStream is = am.open(CSVFile)) {
 			//br=new BufferedReader(new FileReader(CSVFile));
-			InputStream is = am.open(CSVFile);
+			;
 			//CSVReader csv = new CSVReader (new InputStreamReader(is));
 			Scanner s = new Scanner(is);
 			//while ((line = br.readLine()) != null ){
@@ -68,11 +68,11 @@ public class ReadCSV {
 				
 //				Log.d("the line",line);
 //				Log.d("CS203",apostleAttributes[5]);
-				try {
+				try (InputStream is1 = am.open(mainActivity.getResources().getString(R.string.language_option)+"/"+apostleAttributes[5])) {
 					//AssetManager assets = getResources().getAssets();
 					//InputStream inputfile = assets.open("language-en/eventdesc");
 					//Scanner s = new Scanner(inputfile);
-					InputStream is1 = am.open(mainActivity.getResources().getString(R.string.language_option)+"/"+apostleAttributes[5]);
+
 					
 					int size = is1.available();//get the size of the file.by block,not very reliable
 					byte[] buffer = new byte[size];
@@ -91,7 +91,7 @@ public class ReadCSV {
 				//add each apostle object to the apostleList
 				apostleList.put(IDnumber, apostle);
 			}
-			is.close();
+			//is.close();
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
