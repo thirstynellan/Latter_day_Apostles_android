@@ -575,14 +575,16 @@ public class JView extends View implements TickListener {
 
 	public void respondToDateChange() {
 		cancelFakeToast();
-		newLayout = calculatePositions();
-		//if (MyPreferences.getAnimationPreference(getContext())) {
+		if (sWidth > 0) {
+			newLayout = calculatePositions();
 			animating = diff();
-//		} else {
-//			currentLayout = newLayout;
-//		}
+		} else {
+			//This allows the app to respond gracefully to fold/unfold events
+			firstTime = true;
+		}
 		invalidate();
 	}
+
 	/**
 	 *
 	 * @return true if there's a difference between the old and new quorums; false if

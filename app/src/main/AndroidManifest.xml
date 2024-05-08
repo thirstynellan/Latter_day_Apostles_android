@@ -15,8 +15,12 @@
         <!-- the android:configChanges line is important! Without it, the app crashes whenever the device rotates. -->
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="true">
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:resizeableActivity="true">
+
+            <meta-data
+                android:name="android.supports_size_changes" android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

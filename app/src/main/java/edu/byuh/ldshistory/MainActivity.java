@@ -7,6 +7,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,12 +45,10 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 	private ImageButton fowButton;
 	private ImageButton bacButton;
 
-	//static final int DATE_DIALOG_ID = 999;
 	public static int STARTING_YEAR = 1832;
 	public static int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 	private HashMap<Calendar, String> texts = new HashMap();
 	private Calendar dates;
-	//private Toast t;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +103,12 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		readEvent();
 		updateTextView();
 		log("at the bottom of onCreate");
+	}
+
+	@Override
+	public void onConfigurationChanged (Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		Log.d("CS203", "inside onConfigurationChanged!!!!");
 	}
 
 	@Override
@@ -180,7 +185,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 			}
 		}
 		jv.setYear(progress + STARTING_YEAR);
-		log("calling respondtodatechange");
+		//log("calling respondtodatechange");
 		jv.respondToDateChange();
 		updateTextView();
 		//enable back and forward button
