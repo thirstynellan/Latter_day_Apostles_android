@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +16,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,7 +26,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
-//import android.support.design.widget.Snackbar;
 
 public class MainActivity extends Activity implements OnSeekBarChangeListener,View.OnClickListener {
 
@@ -55,37 +46,21 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		super.onCreate(savedInstanceState);
 		log("at the top of onCreate");
 
-
-		//AssetManager assetManager = getAssets();
-		//ReadCSV csv = new ReadCSV(assetManager, this);
-
-		//ReadList list = new ReadList(assetManager, csv);
-
 		// set the seekBar
 		setContentView(R.layout.main);
 
 		jv = (JView) findViewById(R.id.jView1);
-		//jv.setCSV(csv);
-		//jv.setReadEvent(event);
-		//jv.setList(list);
-		//jv.setKeys(list.twelveList.keySet());
 		int diff = CURRENT_YEAR - STARTING_YEAR;
 		timeSlider = (SeekBar) findViewById(R.id.seekBar1);
 		timeSlider.setMax(diff);
 		timeSlider.setProgress(diff);
 		timeSlider.setOnSeekBarChangeListener(this);
-		//timeSlider.callOnClick(diff);
-
-		//tv.setText(Integer.toString(CURRENT_YEAR));
 
 		if (savedInstanceState == null) {
 			log("No saved date; defaulting to today's date");
 			jv.setMonth(Calendar.getInstance().get(Calendar.MONTH) + 1);
 			jv.setDay(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 			jv.setYear(CURRENT_YEAR);
-//			jv.setMonth(12); //for testing... you can delete this
-//			jv.setDay(19);
-//			jv.setYear(1930);
 		} else {
 			final String savedDate = savedInstanceState.getString(STATE_KEY);
 			final String[] parts = savedDate.split("/");
@@ -105,11 +80,11 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		log("at the bottom of onCreate");
 	}
 
-	@Override
-	public void onConfigurationChanged (Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		Log.d("CS203", "inside onConfigurationChanged!!!!");
-	}
+//	@Override
+//	public void onConfigurationChanged (Configuration newConfig) {
+//		super.onConfigurationChanged(newConfig);
+//		Log.d("CS203", "inside onConfigurationChanged!!!!");
+//	}
 
 	@Override
 	protected void onSaveInstanceState (Bundle outState) {
@@ -119,7 +94,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		int m = jv.getMonth();
 		int d = jv.getDay();
 		outState.putString(STATE_KEY, y + "/" + m + "/" + d);
-		log("Rotation detected! Saving current date: " + y + "/" + m + "/" + d);
+		log("Fold/unfold detected! Saving current date: " + y + "/" + m + "/" + d);
 	}
 
 
@@ -131,29 +106,29 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		log("at the bottom of onResume");
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		log("inside onStart");
-	}
-
-	@Override
-	public void onRestart() {
-		super.onRestart();
-		log("inside onRestart");
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		log("inside ondestroy");
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		log("inside onStop");
-	}
+//	@Override
+//	public void onStart() {
+//		super.onStart();
+//		log("inside onStart");
+//	}
+//
+//	@Override
+//	public void onRestart() {
+//		super.onRestart();
+//		log("inside onRestart");
+//	}
+//
+//	@Override
+//	public void onDestroy() {
+//		super.onDestroy();
+//		log("inside ondestroy");
+//	}
+//
+//	@Override
+//	public void onStop() {
+//		super.onStop();
+//		log("inside onStop");
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,21 +160,18 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 			}
 		}
 		jv.setYear(progress + STARTING_YEAR);
-		//log("calling respondtodatechange");
 		jv.respondToDateChange();
 		updateTextView();
 		//enable back and forward button
 		bacButton.setEnabled(true);
 		fowButton.setEnabled(true);
 	}
-	public void updateTextView(){
-
+	public void updateTextView() {
 		int year = jv.getYear();
 		int day = jv.getDay();
 		int month =jv.getMonth();
 		Calendar dates = new GregorianCalendar(year, month - 1, day);
 		//set max and min bounds disabling button
-		//SimpleDateFormat month_date = new SimpleDateFormat("MMM");
 		String month_name = dates.getDisplayName(Calendar.MONTH,Calendar.SHORT, Locale.getDefault());
 		TextView tv = (TextView) findViewById(R.id.textView2);
 		tv.setText(day
@@ -292,9 +264,6 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		return true;
 	}
 
-	//CharSequence text = null;
-
-
 	//time progress button
 	@Override
 	public void onClick(View v) {
@@ -333,29 +302,12 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 	}
 
 	private void showToast(CharSequence words) {
-		//Log.d("test-what", words.toString());
-		//if (MyPreferences.getToastPreference(this)) {
-			jv.createFakeToast(words);
-			Log.d("***FAKE_TOAST***", words.toString());
-//		} else {
-//			t = Toast.makeText(this, words, Toast.LENGTH_LONG);
-//			t.setGravity(Gravity.TOP, 0, 0);
-//			t.show();
-//			Log.d("***REAL_TOAST***", words.toString());
-//		}
+		jv.createFakeToast(words);
+		Log.d("***FAKE_TOAST***", words.toString());
 	}
 
 	private void cancelToast() {
-		//if (MyPreferences.getToastPreference(this)) {
-			jv.cancelFakeToast();
-//		} else {
-//			if (t != null){
-//				t.cancel();
-//			}
-//		}
-//		if(t!=null){
-//			t.cancel();
-//		}
+		jv.cancelFakeToast();
 	}
 
 	public void showToast(int id) {
@@ -391,7 +343,6 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		float fontSize = 1;
 		Paint p = new Paint();
 		p.setTextSize(fontSize);
-		//float lowerThreshold = dim;
 		while (true) {
 			float asc = -p.getFontMetrics().ascent;
 			if (asc > dim) {

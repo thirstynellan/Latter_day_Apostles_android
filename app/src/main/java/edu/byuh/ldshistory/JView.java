@@ -2,6 +2,7 @@ package edu.byuh.ldshistory;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,28 +26,32 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 
 public class JView extends View implements TickListener {
 
-	private Paint paint, cPaint, textPaint;
+	private final Paint paint, cPaint, textPaint;
 	int sWidth;
-	//int sHeight;
 	int minorRadius;
 	int majorRadius;
 	int cx;
 	int cy;
 	private Path circle1;
 	private Path circle2;
-	private ReadCSV csv;
-	private ReadList list;
+	private final HashMap <Integer, Apostle> apostleList = new  HashMap <Integer, Apostle> ();
+	private final HashMap <Calendar, ArrayList<Apostle>> presidencyList = new  HashMap <Calendar, ArrayList<Apostle> > ();
+	private final HashMap <Calendar, ArrayList<Apostle>> twelveList = new  HashMap <Calendar, ArrayList<Apostle> > ();
 	private int bWidth;
 	private int bHeight;
 	private int year;
@@ -55,7 +59,7 @@ public class JView extends View implements TickListener {
 	private int day;
 	private Calendar date = new GregorianCalendar();
 	private boolean firstTime = true;
-	private ArrayList<Calendar> sortKeys = new ArrayList<Calendar>();
+	private final ArrayList<Calendar> sortKeys = new ArrayList<Calendar>();
 	private boolean animating;
 	private float outerCircleRadius, innerCircleRadius, whiteCircleRadius;
 	private static final float TWO_PI = (float)(2f * Math.PI);
@@ -74,11 +78,9 @@ public class JView extends View implements TickListener {
 
 	public void createFakeToast(CharSequence words) {
 		fakeToast = new FakeToast(this, words.toString());
-		//Log.d("Debug! ******** ", words.toString());
 	}
 
 	public void cancelFakeToast() {
-		//Log.d("Cancel_Toast****", "Printing cancelFakeToast method!");
 		if (fakeToast != null) {
 			fakeToast = null;
 			invalidate();
@@ -151,19 +153,16 @@ public class JView extends View implements TickListener {
 		touchDown = null;
 		Timer timer = new Timer();
 		timer.addFollower(this);
-		//velocity = 0;
 		boingDegrees = 0;
-		//touching = false;
 		rot = Rotation.CCW;
 		bounceBack = false;
 	}
 
 	public boolean goForward() {
-		//Log.d("CS203","This is a test for forward button");
 		int i = sortKeys.indexOf(date);
 		if (i==-1) {
 			for (int j = 0; j < sortKeys.size(); j++) {
-				if (((Calendar) sortKeys.get(j)).before(date) == true) {
+				if (((Calendar) sortKeys.get(j)).before(date)) {
 					date = (Calendar) sortKeys.get(j);
 					i = sortKeys.indexOf(date);
 					break;
@@ -190,7 +189,7 @@ public class JView extends View implements TickListener {
 		int i = sortKeys.indexOf(date);
 		if (i==-1) {
 			for (int j = 0; j < sortKeys.size(); j++) {
-				if (((Calendar) sortKeys.get(j)).before(date) == true) {
+				if (((Calendar) sortKeys.get(j)).before(date)) {
 					date = (Calendar) sortKeys.get(j);
 					i = sortKeys.indexOf(date);
 					break;
@@ -221,27 +220,26 @@ public class JView extends View implements TickListener {
 			// date.set(year,month-1,day,0,0,0);//month is 0 based with set
 			// method
 			date = new GregorianCalendar(year, month - 1, day);
-			//log("New date is " + day + " " + month + " " + year);
 
 			//busy wait, until list object finishes loading
 			//log("before busy wait");
-			while (list == null || list.twelveList == null) {
+			while (twelveList == null) {
 				//log("inside busy wait");
 			}
 			//log("after busy wait");
 
-			if (list.twelveList.containsKey(date) == false) {
+			if (twelveList.containsKey(date) == false) {
 				// loop through the sorted dates from back wards and use the
 				// before method, if return true then set the date
 				for (int i = 0; i < sortKeys.size(); i++) {
-					if (((Calendar) sortKeys.get(i)).before(date) == true) {
+					if (((Calendar) sortKeys.get(i)).before(date)) {
 						date = (Calendar) sortKeys.get(i);
 						break;
 					}
 				}
 			}
-			pp.tweNumber = list.twelveList.get(date).size();
-			pp.preNumber = list.presidencyList.get(date).size();
+			pp.tweNumber = twelveList.get(date).size();
+			pp.preNumber = presidencyList.get(date).size();
 		} else {
 			pp.tweNumber = 12;
 			pp.preNumber = 3;
@@ -263,7 +261,7 @@ public class JView extends View implements TickListener {
 		float increment = TWO_PI / pp.tweNumber;
 		float fudge = 0;	//for "spring back" when user tries to advance past current year
 		float fudgeFactor = boingDegrees / pp.tweNumber;
-		for (Apostle a : list.twelveList.get(date)) {
+		for (Apostle a : twelveList.get(date)) {
 			ApostlePosition pos = pp.positions.get(a);
 			if (pos == null) {
 				pos = new ApostlePosition();
@@ -292,7 +290,7 @@ public class JView extends View implements TickListener {
 		//compute positions of first presidency members
 		radians = -PI_HALVES; //top of circle
 		increment = TWO_PI / pp.preNumber;
-		for (Apostle a : list.presidencyList.get(date)) {
+		for (Apostle a : presidencyList.get(date)) {
 			ApostlePosition pos = pp.positions.get(a);
 			if (pos == null) {
 				pos = new ApostlePosition();
@@ -320,7 +318,7 @@ public class JView extends View implements TickListener {
 		}
 
 		//hack for 1833, where Joseph Smith had no counselors.
-		if (list.presidencyList.get(date).size() == 1) {
+		if (presidencyList.get(date).size() == 1) {
 			fpLines.reset();
 		}
 
@@ -331,17 +329,12 @@ public class JView extends View implements TickListener {
 	public void onDraw(Canvas c) {
 		if (firstTime || sWidth != getWidth()) {
 			cancelFakeToast();
-			//System.out.print("Test"+month+day+year);
 			sWidth = getWidth();
 			int sHeight = getHeight();
 			minorRadius = Math.min(sWidth, sHeight);
 			majorRadius = Math.max(sWidth, sHeight);
 			cx = sWidth / 2;
-			//if (sHeight > sWidth) {
-			//	cy = (int) (sWidth / 2.2 + sHeight / 11);
-			//} else {
 			cy = sHeight/2;
-			//}
 			outerCircleRadius = minorRadius / 2f;
 			whiteCircleRadius = minorRadius*0.21f;
 			innerCircleRadius = minorRadius*0.19f;
@@ -386,7 +379,6 @@ public class JView extends View implements TickListener {
 			//draw the FP lines
 			c.drawPath(fpLines, paint);
 		}
-		//log("rendering " + currentLayout.positions.keySet().size() + " apostles");
 		for (Apostle ap : currentLayout.positions.keySet()) {
 
 			//if we're animating, don't instantiate anything.
@@ -431,7 +423,6 @@ public class JView extends View implements TickListener {
 			downRadius = (float)Math.hypot(touchDown.x-cx, touchDown.y-cy);
 			oldDegrees = (float)Math.atan2(y-cy, x-cx);
 			cancelFakeToast();
-			//prevTouchTime = me.getDownTime();
 		} else if (me.getAction() == MotionEvent.ACTION_UP) {
 			//Log.d("CS203", "finger up!");
 			if (boingDegrees != 0) {
@@ -452,12 +443,8 @@ public class JView extends View implements TickListener {
 					if (image.contains(x, y)){
 						//get that person's bio in a PopupWindow class/ new activity/ dialog box
 						LinearLayout linearlt = new LinearLayout(getContext());
-						//linearlt.setBackgroundColor(Color.rgb(62, 82, 121));
-						//linearlt.setPadding(5, 5, 5, 0);
 						ScrollView scrollvw = new ScrollView(getContext());
 						ImageView imagevw = new ImageView(getContext());
-						//imagevw.setPadding(-200,10,0,10);
-						//imagevw.setBackgroundColor(Color.rgb(62, 82, 121));
 						Bitmap largePhoto = BitmapFactory.decodeResource(getResources(), ap.resID);
 						imagevw.setImageBitmap(largePhoto);
 						if (largePhoto.getHeight() < getHeight()/2) {
@@ -469,11 +456,7 @@ public class JView extends View implements TickListener {
 
 						textvw.setText(Html.fromHtml(ap.getBio()));
 						textvw.setMovementMethod(LinkMovementMethod.getInstance());
-						//textvw.setText(ap.getBio());
 						textvw.setPadding(15, 0, 15, 0);
-						//Linkify.addLinks(textvw, Linkify.WEB_URLS);
-						//textvw.setTextColor(Color.LTGRAY);
-						//textvw.setTextSize(17);
 						scrollvw.addView(textvw);
 						linearlt.addView(imagevw);
 						linearlt.addView(scrollvw);
@@ -490,8 +473,6 @@ public class JView extends View implements TickListener {
 		} else if (me.getAction() == MotionEvent.ACTION_MOVE && touchDown != null) {
 			if (downRadius >= innerCircleRadius/2 && downRadius <= outerCircleRadius) {
 				float degreeDelta=0;
-				//float dx = x-touchDown.x;
-				//float dy = y-touchDown.y;
 				float curRadius = (float)Math.hypot(x-cx, y-cy);
 				float degree = (float)(Math.atan2(y-cy, x-cx));
 				if (curRadius >= innerCircleRadius/2 && curRadius <= outerCircleRadius) {
@@ -529,11 +510,10 @@ public class JView extends View implements TickListener {
 					}
 					int yearDelta = (int)(degreeDelta * (50 / Math.PI));//50 years = half circle
 					int newYear = year + yearDelta;
-					if (newYear > MainActivity.CURRENT_YEAR /*&& MyPreferences.getAnimationPreference(getContext())*/) {
+					if (newYear > MainActivity.CURRENT_YEAR) {
 						boingDegrees += degreeDelta;
 						currentLayout = calculatePositions();
 						invalidate();
-						//log("peering into the future! " + Math.toDegrees(boingDegrees));
 					}
 					newYear = Math.max(newYear, MainActivity.STARTING_YEAR);
 					newYear = Math.min(newYear, MainActivity.CURRENT_YEAR);
@@ -750,11 +730,127 @@ public class JView extends View implements TickListener {
 	}
 
 	private void generatedList() {
-		int fixedScreenSize= Math.min(getWidth(),getHeight())/8;
-		csv = new ReadCSV(getContext().getAssets(), getContext(), fixedScreenSize*4/5, fixedScreenSize);
-		list = new ReadList(getContext().getAssets(), csv);
-		setKeys(list.twelveList.keySet());
+		final int fixedScreenSize= Math.min(getWidth(),getHeight())/8;
+		readCSV(getContext().getAssets(), getContext(), fixedScreenSize*4/5, fixedScreenSize);
+		readList(getContext().getAssets());
+		setKeys(twelveList.keySet());
 	}
+
+	private void readList(AssetManager am) {
+		final String CSVFile = "list"; // the csv file
+		final String splitBy= "\\|";
+		final String splitBy1 = "%";
+
+		try (InputStream is = am.open(CSVFile)) {
+			Scanner s = new Scanner(is);
+			while (s.hasNextLine()) {
+				//split by comma, apostleAttributes comtain a single line of the csv file
+				String line = s.nextLine();
+				String[] listAttribtes = line.split(splitBy1);
+				String list1= listAttribtes[0];
+				String[] presidency;
+				presidency = list1.split(splitBy);
+
+				String[] twelve = null;
+				if (listAttribtes[1].length() != 0) {
+					String list2 = listAttribtes[1];
+					twelve = list2.split(splitBy);
+				}
+				int year = Integer.parseInt(presidency[0].substring(0,4));
+				int month = Integer.parseInt(presidency[0].substring(4,6));
+				int day = Integer.parseInt(presidency[0].substring(6,8));
+				Calendar dates = new GregorianCalendar(year,month-1,day);
+				ArrayList <Apostle> presidencies = new ArrayList <Apostle>();
+				ArrayList <Apostle> twelves = new ArrayList <Apostle>();
+				for (int i=1; i<presidency.length; i++) {//exclude presidency[0] which  is the year
+					for (int j=1; j<=apostleList.size();j++) {
+						if (presidency[i].equals(apostleList.get(j).getName()) ){
+							presidencies.add(apostleList.get(j));//add that apostle to the apostles instead of instanciating new apostle
+						}
+					}
+
+				}
+				if(twelve != null){
+					for (int i=0; i<twelve.length; i++) {
+						for (int j=1; j<=apostleList.size();j++) {
+							if (twelve[i].equals(apostleList.get(j).getName()) ){
+								twelves.add(apostleList.get(j));//add that apostle to the apostles instead of instanciating new apostle
+							}
+						}
+
+					}
+				}
+
+				//add apostles(of each year) into the hashmap
+				presidencyList.put(dates, presidencies);
+				twelveList.put(dates,twelves);
+			}
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void readCSV(AssetManager am, Context mainActivity, int bWidth, int bHeight) {
+		String CSVFile = "apostle"; // the csv file
+		String splitBy= "\\|";
+		Bitmap apostleImage;
+
+		try (InputStream is = am.open(CSVFile)) {
+			Scanner s = new Scanner(is);
+			while (s.hasNextLine()) {
+				//split by comma, apostleAttributes comtain a single line of the csv file
+				String line = s.nextLine();
+				String[] apostleAttributes = line.split(splitBy);
+
+				//instanciate a single apostle object
+				Apostle apostle = new Apostle();
+				//set the arrtibutes of each apostle
+				apostle.setId(apostleAttributes[0]);
+				Integer IDnumber  = new Integer (apostleAttributes[0]); // used for the hashmap
+				apostle.setName(apostleAttributes[1]);
+				apostle.setBirth(apostleAttributes[2]);
+				apostle.setDeath(apostleAttributes[3]);
+				//get the file name of the apostle picture and change it to a bitmap object
+				apostle.resID = mainActivity.getResources().getIdentifier(apostleAttributes[4].trim(), "drawable", mainActivity.getPackageName());
+				apostleImage = BitmapFactory.decodeResource(mainActivity.getResources(), apostle.resID);
+				apostleImage = Bitmap.createScaledBitmap(apostleImage, bWidth, bHeight, true);
+
+				apostle.setPhoto(apostleImage);
+
+				try (InputStream is1 = am.open(mainActivity.getResources().getString(R.string.language_option)+"/"+apostleAttributes[5])) {
+					int size = is1.available();//get the size of the file.by block,not very reliable
+					byte[] buffer = new byte[size];
+					is1.read(buffer);
+					//change byte buffer to string
+					String text = new String (buffer);
+					apostle.setBio(text);
+				}
+
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				catch (IOException e){
+					e.printStackTrace();
+				}
+				//add each apostle object to the apostleList
+				apostleList.put(IDnumber, apostle);
+			}
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
 
 
 	private boolean bouncing() {
