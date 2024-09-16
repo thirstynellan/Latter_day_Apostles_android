@@ -156,7 +156,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 				jv.setDay(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 			} else {
 				jv.setMonth(1);
-				jv.setDay(1);   //default the slider bar as the first day of each year
+				jv.setDay(1); //default the slider bar as the first day of each year
 			}
 		}
 		jv.setYear(progress + STARTING_YEAR);
