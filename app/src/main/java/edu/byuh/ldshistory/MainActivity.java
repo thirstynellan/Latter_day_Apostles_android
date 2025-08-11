@@ -11,11 +11,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,7 +83,40 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 		readEvent();
 		updateTextView();
 		log("at the bottom of onCreate");
+
+		//Due to Edge-to-Edge: move the toasts down, so they appear
+		//below the toolbar
+		ViewCompat.setOnApplyWindowInsetsListener(jv, (v, windowInsets) -> {
+			Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+			ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+			mlp.leftMargin = insets.left;
+			mlp.topMargin = insets.top;
+			mlp.rightMargin = insets.right;
+			v.setLayoutParams(mlp);
+			return WindowInsetsCompat.CONSUMED;
+		});
+
+		//Due to Edge-to-Edge: Move the slider up, so it appears
+		//above the navigation bar.
+		ViewCompat.setOnApplyWindowInsetsListener(timeSlider, (v, windowInsets) -> {
+			Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+			// Apply the insets as a margin to the view. This solution sets only the
+			// bottom, left, and right dimensions, but you can apply whichever insets are
+			// appropriate to your layout. You can also update the view padding if that's
+			// more appropriate.
+			ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+			mlp.leftMargin = insets.left;
+			mlp.bottomMargin = insets.bottom;
+			mlp.rightMargin = insets.right;
+			v.setLayoutParams(mlp);
+
+			// Return CONSUMED if you don't want the window insets to keep passing
+			// down to descendant views.
+			return WindowInsetsCompat.CONSUMED;
+		});
 	}
+
+
 
 //	@Override
 //	public void onConfigurationChanged (Configuration newConfig) {

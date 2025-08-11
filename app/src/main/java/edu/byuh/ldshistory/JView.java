@@ -78,6 +78,7 @@ public class JView extends View implements TickListener {
 
 	public void createFakeToast(CharSequence words) {
 		fakeToast = new FakeToast(this, words.toString());
+
 	}
 
 	public void cancelFakeToast() {
