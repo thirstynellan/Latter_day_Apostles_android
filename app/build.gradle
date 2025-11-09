@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "edu.byuh.ldshistory"
         minSdk 21
         targetSdk 35
-        versionCode 41
-        versionName "1.4.5.2"
+        versionCode 44
+        versionName "1.4.5.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

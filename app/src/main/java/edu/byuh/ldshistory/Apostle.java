@@ -12,8 +12,6 @@ import android.text.format.DateFormat;
 public class Apostle {
 	
 	private String name;
-//	private Calendar birth;
-//	private Calendar death;
 	private String birth;
 	private String death;
 	private Bitmap photo ;
@@ -81,26 +79,5 @@ public class Apostle {
 	public void setId(String id) {
 		this.id = Integer.parseInt(id);
 	}
-
-//	public HashMap<Calendar, String> getTitle() {
-//		return titles;
-//	}
-//
-//	public void setTitle(Calendar date, String title) {
-//		this.titles.put(date, title);
-//	}
-
-//	public HashMap<Integer, Event> getEvent() {
-//		return events; 
-//	}
-//
-//	public void setEvent(Integer id, Event event) {
-//		
-//		events.put(id, event);
-//	}
-	
-	
-	
-	
 
 }

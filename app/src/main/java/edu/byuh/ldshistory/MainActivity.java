@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements OnSeekBarChangeListener,Vi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		log("at the top of onCreate");
 
 		// set the seekBar
